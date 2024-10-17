@@ -13,7 +13,7 @@ public class Hero : MonoBehaviour
     [Header("Movement")]
     [SerializeField] float groundForce = 90f;
     [SerializeField] float airForce = 70f;
-    [SerializeField] float jumpForce = 37.5f;
+    [SerializeField] float jumpForce = 50f;
     [SerializeField] float gravity = 100f;
     [SerializeField] float fallSpeedThreshold = 100f;
     private bool facingRight = true;
@@ -35,7 +35,6 @@ public class Hero : MonoBehaviour
 
     private void Update()
     {
-        PlayAnimation();
     }
 
     private void FixedUpdate()
@@ -43,6 +42,7 @@ public class Hero : MonoBehaviour
         CheckGrounded();
         ApplyManualGravity();
         OnWall();
+        PlayAnimation();
     }
 
     public void Move(float moveX)
@@ -195,36 +195,23 @@ public class Hero : MonoBehaviour
 
     private void PlayAnimation()
     {
+        Animator animator = GetComponent<Animator>();
         if (IsGrounded() && rb.velocity.magnitude > 0.75)
         {
-            SetAnimBool("isRunning", true);
-            SetAnimBool("isRising", false);
-            SetAnimBool("isFalling", false);
+            animator.CrossFade("Run", 0.01f);
         } 
         else if (!IsGrounded() && rb.velocity.y > 0)
         {
-            SetAnimBool("isRunning", false);
-            SetAnimBool("isRising", true);
-            SetAnimBool("isFalling", false);
+            animator.CrossFade("Rise", 0.01f);
         }
         else if (!IsGrounded() && rb.velocity.y < -0)
         {
-            SetAnimBool("isRunning", false);
-            SetAnimBool("isRising", false);
-            SetAnimBool("isFalling", true);
+            animator.CrossFade("Fall", 0.01f);
         }
         else
         {
-            SetAnimBool("isRunning", false);
-            SetAnimBool("isRising", false);
-            SetAnimBool("isFalling", false);
+            animator.CrossFade("Idle", 0.01f);
         }
-    }
-
-    private void SetAnimBool(string name, bool value)
-    {
-        Animator animator = GetComponent<Animator>();
-        animator.SetBool(name, value);
     }
 
     private enum AirState

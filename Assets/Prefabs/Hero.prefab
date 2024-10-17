@@ -111,7 +111,7 @@ MonoBehaviour:
   groundOffset: 0.1
   groundForce: 90
   airForce: 70
-  jumpForce: 37.5
+  jumpForce: 50
   gravity: 100
   fallSpeedThreshold: 100
   wallCheck: {fileID: 0}
