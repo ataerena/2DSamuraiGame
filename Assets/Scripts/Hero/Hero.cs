@@ -42,7 +42,7 @@ public class Hero : MonoBehaviour
         CheckGrounded();
         ApplyManualGravity();
         OnWall();
-        PlayAnimation();
+        //Removed Animations for Now //PlayAnimation();
     }
 
     public void Move(float moveX)
@@ -144,7 +144,7 @@ public class Hero : MonoBehaviour
         }
         else 
         {
-            rb.AddForce(new Vector3(0, -5f, 0), ForceMode2D.Force);
+            rb.AddForce(new Vector3(0, -20f, 0), ForceMode2D.Force);
         }
     }
 
