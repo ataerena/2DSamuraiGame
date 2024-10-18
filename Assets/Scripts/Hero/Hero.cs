@@ -42,7 +42,7 @@ public class Hero : MonoBehaviour
         CheckGrounded();
         ApplyManualGravity();
         OnWall();
-        //Removed Animations for Now //PlayAnimation();
+        PlayAnimation();
     }
 
     public void Move(float moveX)
