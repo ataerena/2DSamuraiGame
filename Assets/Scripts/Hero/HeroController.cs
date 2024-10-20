@@ -14,6 +14,47 @@ public class HeroController : MonoBehaviour
 
     void Update()
     {
+        BufferMovement();
+        BufferCombat();
+    }
+
+    void FixedUpdate()
+    {
+        UpdateMovement();
+        UpdateAttack();
+    }
+
+    void UpdateAttack()
+    {
+        
+    }
+    void UpdateMovement()
+    {
+        hero.Move(moveX);
+
+        if (jumpPressed)
+        {
+            hero.Jump();
+            jumpPressed = false;
+        }
+    }
+
+    // clock buffers //
+
+    void BufferCombat()
+    {   
+        if (KeyboardControls.IsKeyHit(KeyboardControls.Button.LightAttack))
+        {
+            hero.isAttacking = true;
+            if (hero.comboActive)
+            {
+                hero.comboActivated = true;
+            }
+        }
+    }
+
+    void BufferMovement()
+    {
         if (KeyboardControls.IsKeyPressed(KeyboardControls.Button.Left))
         {
             moveX = -1f;
@@ -30,22 +71,6 @@ public class HeroController : MonoBehaviour
         if (KeyboardControls.IsKeyHit(KeyboardControls.Button.Jump))
         {
             jumpPressed = true;
-        }
-    }
-
-    void FixedUpdate()
-    {
-        UpdateMovement();
-    }
-
-    void UpdateMovement()
-    {
-        hero.Move(moveX);
-
-        if (jumpPressed)
-        {
-            hero.Jump();
-            jumpPressed = false;
         }
     }
 }

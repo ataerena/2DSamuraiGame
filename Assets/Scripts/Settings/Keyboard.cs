@@ -8,14 +8,16 @@ public static class KeyboardControls
     {
         Left,
         Right,
-        Jump
+        Jump,
+        LightAttack
     }
 
     private static readonly Dictionary<Button, KeyCode> keyBindings = new Dictionary<Button, KeyCode>()
     {
         { Button.Left, KeyCode.A },
         { Button.Right, KeyCode.D },
-        { Button.Jump, KeyCode.Space }
+        { Button.Jump, KeyCode.Space },
+        { Button.LightAttack, KeyCode.Mouse0 }
     };
 
     public static KeyCode GetKey(Button button)

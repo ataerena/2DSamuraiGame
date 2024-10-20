@@ -26,6 +26,12 @@ public class Hero : MonoBehaviour
     private float wallTime = 0f;
     private WallState wallState;
 
+    [Header("Combat")]
+    [SerializeField] GameObject hitBox;
+    public bool isAttacking = false;
+    public bool comboActive = false;
+    public bool comboActivated = false;
+
     // ---------------------- //
     private Rigidbody2D rb;
     private void Start()
@@ -44,6 +50,8 @@ public class Hero : MonoBehaviour
         OnWall();
         PlayAnimation();
     }
+
+    #region Movement
 
     public void Move(float moveX)
     {
@@ -193,13 +201,67 @@ public class Hero : MonoBehaviour
         wallTime = 0f;
     }
 
+    #endregion
+
+    #region Combat 
+
+    public void LightAttack()
+    {
+        
+        hitBox.SetActive(true);
+        hitBox.GetComponent<BoxCollider2D> ().enabled = true;
+    }
+
+    private void ResetAttack()
+    {
+        comboActive = true;
+        hitBox.SetActive(false);
+        hitBox.GetComponent<BoxCollider2D> ().enabled = false;
+    }
+
+    private void EndAttack()
+    {
+        comboActivated = false;
+        comboActive = false;
+        isAttacking = false;
+    }
+
+    private void EndCombo()
+    {
+        hitBox.SetActive(false);
+        hitBox.GetComponent<BoxCollider2D> ().enabled = false;
+        comboActive = false;
+        isAttacking = false;
+    }
+
+    #endregion
+
+    #region Animation
+
     private void PlayAnimation()
     {
         Animator animator = GetComponent<Animator>();
+        if (isAttacking)
+        {
+            if (comboActive == false)
+            {
+                animator.CrossFade("Attack1", 0.01f);
+            }
+            else if (comboActive == true && comboActivated == true)
+            {
+                animator.CrossFade("Attack2", 0.01f);
+            }
+            return;
+        }
+
         if (IsGrounded() && rb.velocity.magnitude > 0.75)
         {
             animator.CrossFade("Run", 0.01f);
-        } 
+        }
+        else if (!IsGrounded() && wallState == WallState.OnWall) 
+        {
+            animator.CrossFade("OnWall", 0.01f);
+        }
         else if (!IsGrounded() && rb.velocity.y > 0)
         {
             animator.CrossFade("Rise", 0.01f);
@@ -213,6 +275,8 @@ public class Hero : MonoBehaviour
             animator.CrossFade("Idle", 0.01f);
         }
     }
+
+    #endregion
 
     private enum AirState
     {

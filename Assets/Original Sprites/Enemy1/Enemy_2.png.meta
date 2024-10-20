@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3606f5351e7a6854182aea00cfa1c5d7
+guid: fb91104289fa955428615fc7b4349034
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6826144949970839653
-    second: Run_01_0
+      213: -555863703859325969
+    second: "d\xFCjman2_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Run_01_0
+      name: "d\xFCjman2_0"
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
-        width: 13
-        height: 16
+        x: 0
+        y: 4
+        width: 31
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 568a6506aa65bbe50800000000000000
-      internalID: 6826144949970839653
+      spriteID: fe39eeb08ec2948f0800000000000000
+      internalID: -555863703859325969
       vertices: []
       indices: 
       edges: []
@@ -157,7 +157,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Run_01_0: 6826144949970839653
+      "d\xFCjman2_0": -555863703859325969
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
