@@ -231,7 +231,13 @@ public class Hero : MonoBehaviour
         hitBox.SetActive(false);
         hitBox.GetComponent<BoxCollider2D> ().enabled = false;
         comboActive = false;
+        comboActivated = false;
         isAttacking = false;
+    }
+
+    private void FailCombo()
+    {
+        comboActive = false;
     }
 
     #endregion
