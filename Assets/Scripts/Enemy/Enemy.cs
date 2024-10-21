@@ -12,7 +12,6 @@ public abstract class Enemy : MonoBehaviour
     protected Rigidbody2D rb;
     protected virtual float moveSpeed { get; set; } = 1f;
     private bool movingRight;
-    [SerializeField] Transform hero;
     [SerializeField] LayerMask playerLayer;
     private float chaseRange { get; set; } = 5f;
     void Start()
@@ -23,7 +22,7 @@ public abstract class Enemy : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         DetectHero();
         UpdateAnimation();
@@ -34,20 +33,32 @@ public abstract class Enemy : MonoBehaviour
         if (!CanDetectHero()) return;
 
         bool facingRight = CheckIsFacingRight();
-        Vector2 movePoint = facingRight ? new Vector2(hero.position.x - 1f, hero.position.y) : new Vector2(hero.position.x + 1f, hero.position.y);
+        
+        Vector2 center = new Vector2(transform.position.x, transform.position.y);
+        Vector2 size = new Vector2(8f, 5f);
 
-        bool heroDetected = Physics2D.Raycast(transform.position, facingRight ? Vector3.right : Vector3.left, 7.5f, playerLayer);
-        if (heroDetected && transform.position.x != movePoint.x)
+        Collider2D detectedHero = Physics2D.OverlapBox(center, size, 0f, playerLayer);
+        
+        Transform hero;
+        if (detectedHero != null)
         {
-            Debug.Log("LESS THAN!");
-            enemyState = EnemyState.Running;
-            transform.position = Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.deltaTime);
+            hero = detectedHero.gameObject.GetComponent<Transform>();
         }
         else
         {
-            /* Debug.Log("Hero is NOT in range!"); */
             ResetToIdle();
+            return; 
+        }   
+
+        Vector2 movePoint = new Vector2(facingRight ? hero.position.x - 1.5f : hero.position.x + 1.5f, hero.position.y);
+        if (Vector2.Distance(movePoint, transform.position) < 0.5f)
+        {
+            ResetToIdle();
+            return;
         }
+
+        enemyState = EnemyState.Running;
+        transform.position = Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.fixedDeltaTime);
     }
 
     protected virtual bool CheckIsFacingRight()
@@ -86,8 +97,8 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Die()
     {
         PlayAnimation("Die");
-        rb.isKinematic = true;
-        cldr2D.enabled = false;
+        Destroy(rb);
+        Destroy(cldr2D);
     }
 
     protected virtual void UpdateAnimation()
@@ -128,6 +139,6 @@ public abstract class Enemy : MonoBehaviour
         TakingDamage,
         Attacking,
         Running,
-        Dead
+        Dead,
     }
 }
