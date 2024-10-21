@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hitbox : MonoBehaviour
 {
+    [SerializeField] Hero hero;
     [SerializeField] LayerMask enemyLayer;
 
     void Start()
@@ -20,7 +21,7 @@ public class Hitbox : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            Debug.Log("Enemy Hit!");
+            collision.gameObject.GetComponent<Enemy>().TakeDamage(hero.weapon.GetDamage());
         }
     }
 

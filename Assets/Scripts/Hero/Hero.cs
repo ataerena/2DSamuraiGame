@@ -27,6 +27,7 @@ public class Hero : MonoBehaviour
     private WallState wallState;
 
     [Header("Combat")]
+    public Weapon weapon;
     [SerializeField] GameObject hitBox;
     public bool isAttacking = false;
     public bool comboActive = false;
@@ -36,6 +37,7 @@ public class Hero : MonoBehaviour
     private Rigidbody2D rb;
     private void Start()
     {
+        weapon = new Sword();
         rb = GetComponent<Rigidbody2D>();
     }
 
