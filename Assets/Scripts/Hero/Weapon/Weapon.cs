@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class Weapon : MonoBehaviour
+public abstract class Weapon
 {
     protected virtual int Damage { get; set; } = 10;
     protected virtual int MaxDurability { get; set; } = 10;
