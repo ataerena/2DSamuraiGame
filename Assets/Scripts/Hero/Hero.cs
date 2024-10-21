@@ -8,7 +8,7 @@ public class Hero : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform groundCheck;
     [SerializeField] float groundOffset = 0.1f;
-    private AirState airState;
+    public AirState airState;
 
     [Header("Movement")]
     [SerializeField] float groundForce = 90f;
@@ -52,6 +52,11 @@ public class Hero : MonoBehaviour
     }
 
     #region Movement
+
+    public bool IsMoving()
+    {
+        return rb.velocity.magnitude > 0.1f;
+    }
 
     public void Move(float moveX)
     {
@@ -284,7 +289,7 @@ public class Hero : MonoBehaviour
 
     #endregion
 
-    private enum AirState
+    public enum AirState
     {
         Grounded,
         Jumping,

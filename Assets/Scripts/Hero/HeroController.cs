@@ -30,6 +30,8 @@ public class HeroController : MonoBehaviour
     }
     void UpdateMovement()
     {
+        if (hero.isAttacking == true) return;
+
         hero.Move(moveX);
 
         if (jumpPressed)
@@ -43,7 +45,7 @@ public class HeroController : MonoBehaviour
 
     void BufferCombat()
     {   
-        if (KeyboardControls.IsKeyHit(KeyboardControls.Button.LightAttack))
+        if (hero.airState == Hero.AirState.Grounded && !hero.IsMoving() && KeyboardControls.IsKeyHit(KeyboardControls.Button.LightAttack))
         {
             hero.isAttacking = true;
             if (hero.comboActive)
