@@ -30,6 +30,7 @@ public class Hero : MonoBehaviour
     [Header("Combat")]
     public Weapon weapon;
     [SerializeField] GameObject hitBox;
+    [SerializeField] LayerMask enemyLayer;
     public bool isAttacking = false;
     public bool comboActive = false;
     public bool comboActivated = false;
@@ -135,6 +136,18 @@ public class Hero : MonoBehaviour
 
     private void CheckGrounded()
     {
+        Collider2D jumpOffEnemy = Physics2D.OverlapCircle(groundCheck.position, 0.001f, enemyLayer);
+
+        if (jumpOffEnemy != null)
+        {
+            rb.velocityY = 0f;
+            rb.AddForce(transform.up * jumpForce / 2, ForceMode2D.Impulse);
+            airState = AirState.Jumping;
+            // this is too overpowered, and this game isn't going to be on a large enough scale to solve this problem. For now, take no damage if from jumping off of enemy heads
+            jumpOffEnemy.GetComponentInParent<Enemy>().TakeDamage(0);
+            return;
+        }
+
         bool isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundOffset, groundLayer);
 
         if (isGrounded)
