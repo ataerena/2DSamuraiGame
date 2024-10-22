@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Hero : MonoBehaviour
 {
@@ -32,11 +33,17 @@ public class Hero : MonoBehaviour
     public bool isAttacking = false;
     public bool comboActive = false;
     public bool comboActivated = false;
+    [Header("Stats")]
+    private int maxHealth = 100;
+    private int health;
+    private bool isTakingHit = false;
+    public bool isDead = false;
 
     // ---------------------- //
     private Rigidbody2D rb;
     private void Start()
     {
+        health = maxHealth;
         weapon = new Sword();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -47,9 +54,13 @@ public class Hero : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CheckGrounded();
-        ApplyManualGravity();
-        OnWall();
+        if (!isDead)
+        {
+            CheckGrounded();
+            ApplyManualGravity();
+            OnWall();
+        }
+
         PlayAnimation();
     }
 
@@ -216,14 +227,14 @@ public class Hero : MonoBehaviour
     {
         
         hitBox.SetActive(true);
-        hitBox.GetComponent<BoxCollider2D> ().enabled = true;
+        hitBox.GetComponent<BoxCollider2D>().enabled = true;
     }
 
     private void ResetAttack()
     {
         comboActive = true;
         hitBox.SetActive(false);
-        hitBox.GetComponent<BoxCollider2D> ().enabled = false;
+        hitBox.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     private void EndAttack()
@@ -236,7 +247,7 @@ public class Hero : MonoBehaviour
     private void EndCombo()
     {
         hitBox.SetActive(false);
-        hitBox.GetComponent<BoxCollider2D> ().enabled = false;
+        hitBox.GetComponent<BoxCollider2D>().enabled = false;
         comboActive = false;
         comboActivated = false;
         isAttacking = false;
@@ -249,11 +260,53 @@ public class Hero : MonoBehaviour
 
     #endregion
 
+    public void TakeDamage(int _damage)
+    {
+        health -= _damage;
+        if (health > 0)
+        {
+            isTakingHit = true;
+        }
+        else
+        {
+            Die();
+        }
+    }
+
+    private void ResetTakingDamage()
+    {
+        isTakingHit = false;
+    }
+
+    private void Die()
+    {
+        isDead = true;
+    }
+
+    private void ReloadScene()
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(currentSceneName);
+    }
+
     #region Animation
 
     private void PlayAnimation()
     {
         Animator animator = GetComponent<Animator>();
+
+        if (isDead)
+        {
+            animator.CrossFade("Die", 0.01f);
+            return;
+        }
+
+        if (isTakingHit)
+        {
+            animator.CrossFade("TakeHit", 0.01f);
+            return;
+        }
+
         if (isAttacking)
         {
             if (comboActive == false)

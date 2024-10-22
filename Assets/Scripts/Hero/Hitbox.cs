@@ -5,7 +5,6 @@ using UnityEngine;
 public class Hitbox : MonoBehaviour
 {
     [SerializeField] Hero hero;
-    [SerializeField] LayerMask enemyLayer;
 
     void Start()
     {

@@ -7,13 +7,15 @@ public abstract class Enemy : MonoBehaviour
     protected virtual int MaxHealth { get; set; } = 100;
     private int currentHealth;
     protected EnemyState enemyState;
-    protected EnemyState lastenemyState;
     protected CapsuleCollider2D cldr2D;
     protected Rigidbody2D rb;
     protected virtual float moveSpeed { get; set; } = 1f;
     private bool movingRight;
     [SerializeField] LayerMask playerLayer;
-    private float chaseRange { get; set; } = 5f;
+    protected float ChaseRange { get; set; } = 5f;
+    private bool canAttack = false;
+    [SerializeField] EnemyHitbox EnemyHitbox;
+    public virtual int damage { get; set; } = 25;
     void Start()
     {
         enemyState = EnemyState.Idle;
@@ -33,32 +35,69 @@ public abstract class Enemy : MonoBehaviour
         if (!CanDetectHero()) return;
 
         bool facingRight = CheckIsFacingRight();
-        
+
         Vector2 center = new Vector2(transform.position.x, transform.position.y);
-        Vector2 size = new Vector2(8f, 5f);
+
+        float verticalRange = ChaseRange + ChaseRange * 0.5f;
+        Vector2 size = new Vector2(verticalRange, ChaseRange);
 
         Collider2D detectedHero = Physics2D.OverlapBox(center, size, 0f, playerLayer);
         
         Transform hero;
         if (detectedHero != null)
         {
+            if (detectedHero.gameObject.GetComponent<Hero>().isDead) return;
+            
             hero = detectedHero.gameObject.GetComponent<Transform>();
+            if (hero.position.x < center.x) movingRight = true;
+            else if (hero.position.x > center.x) movingRight = false;
+            Flip();
         }
         else
         {
             ResetToIdle();
             return; 
-        }   
+        }
 
-        Vector2 movePoint = new Vector2(facingRight ? hero.position.x - 1.5f : hero.position.x + 1.5f, hero.position.y);
+        UpdateCanAttack(hero);
+
+        Vector2 movePoint = new Vector2(facingRight ? hero.position.x - 1f : hero.position.x + 1f, hero.position.y);
         if (Vector2.Distance(movePoint, transform.position) < 0.5f)
         {
-            ResetToIdle();
             return;
         }
 
         enemyState = EnemyState.Running;
         transform.position = Vector2.MoveTowards(transform.position, movePoint, moveSpeed * Time.fixedDeltaTime);
+    }
+
+    protected virtual void UpdateCanAttack(Transform hero)
+    {
+        Vector2 movePoint = new Vector2(CheckIsFacingRight() ? hero.position.x - 1.5f : hero.position.x + 1.5f, hero.position.y);
+        canAttack = Vector2.Distance(movePoint, transform.position) < 0.5f;
+
+        if (!canAttack) return;
+        else
+        {
+            Attack();
+        }
+    }
+
+    protected virtual void Attack()
+    {
+        enemyState = EnemyState.Attacking;
+    }
+
+    protected virtual void ConnectAttack()
+    {
+        EnemyHitbox.gameObject.SetActive(true);
+        EnemyHitbox.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+    }
+
+    protected virtual void ResetAttack()
+    {
+        EnemyHitbox.gameObject.SetActive(false);
+        EnemyHitbox.gameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
 
     protected virtual bool CheckIsFacingRight()
@@ -83,9 +122,9 @@ public abstract class Enemy : MonoBehaviour
     public virtual void TakeDamage(int _damage) // public class instead of protected so that the Hitbox script can access it
     {
         enemyState = EnemyState.TakingDamage;
+        currentHealth -= _damage;
         if (currentHealth > 0)
         {
-            currentHealth -= _damage;
             PlayAnimation("TakeHit");
         } 
         else 
@@ -111,6 +150,10 @@ public abstract class Enemy : MonoBehaviour
         {
             PlayAnimation("Run");
         }
+        else if (enemyState == EnemyState.Attacking)
+        {
+            PlayAnimation("Attack");
+        }
     }
 
     protected virtual void PlayAnimation(string _name)
@@ -130,7 +173,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual bool CanDetectHero()
     {
-        return enemyState == EnemyState.Idle || enemyState == EnemyState.Running;
+        return enemyState != EnemyState.Dead && enemyState != EnemyState.TakingDamage;
     }
 
     protected enum EnemyState
