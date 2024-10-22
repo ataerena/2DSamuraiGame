@@ -17,6 +17,9 @@ public class Hero : MonoBehaviour
     [SerializeField] float jumpForce = 50f;
     [SerializeField] float gravity = 100f;
     [SerializeField] float fallSpeedThreshold = 100f;
+    [SerializeField] private float maxSlopeAngle = 45f;
+    private bool onSlope = false;
+    private Vector2 slopeNormal;
     private bool facingRight = true;
 
     [Header("Wall")]
@@ -60,6 +63,7 @@ public class Hero : MonoBehaviour
             CheckGrounded();
             ApplyManualGravity();
             OnWall();
+            HandleSlopeMovement();
         }
 
         PlayAnimation();
@@ -153,6 +157,7 @@ public class Hero : MonoBehaviour
         if (isGrounded)
         {
             airState = AirState.Grounded;
+            DetectSlope();
             ResetWallState();
         }
         else if (!(airState == AirState.Jumping || airState == AirState.DoubleJumping))
@@ -163,6 +168,49 @@ public class Hero : MonoBehaviour
         if (!isGrounded)
         {
             CheckOnWall();
+        }
+    }
+
+    private void DetectSlope()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(groundCheck.position, Vector2.down, groundOffset + 0.5f, groundLayer);
+
+        if (hit)
+        {
+            slopeNormal = hit.normal;
+            float slopeAngle = Vector2.Angle(slopeNormal, Vector2.up);
+
+            Debug.Log("Angle: " + slopeAngle);
+
+            if (slopeAngle > 10f && slopeAngle <= maxSlopeAngle)
+            {
+                onSlope = true;
+            }
+            else
+            {
+                onSlope = false;
+            }
+        }
+        else
+        {
+            onSlope = false;
+        }
+    }
+
+    private void HandleSlopeMovement()
+    {
+        if (IsGrounded() && onSlope)
+        {
+            Vector2 slopeDirection = Vector2.Perpendicular(slopeNormal).normalized;
+            float moveDirection = facingRight ? -1 : 1;
+            float force = groundForce / 2;
+            
+            Vector2 moveForce = force * moveDirection * slopeDirection;
+            rb.AddForce(moveForce, ForceMode2D.Force);
+            if (rb.velocity.y < 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            }
         }
     }
 
