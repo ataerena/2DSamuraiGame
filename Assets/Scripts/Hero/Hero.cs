@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class Hero : MonoBehaviour
 {
     [Header("Ground Check")]
+    [SerializeField] LayerMask killzoneLayer;
     [SerializeField] LayerMask groundLayer;
     [SerializeField] Transform groundCheck;
     [SerializeField] float groundOffset = 0.1f;
@@ -37,6 +38,7 @@ public class Hero : MonoBehaviour
     public bool isAttacking = false;
     public bool comboActive = false;
     public bool comboActivated = false;
+
     [Header("Stats")]
     private int maxHealth = 100;
     private int health;
@@ -140,6 +142,12 @@ public class Hero : MonoBehaviour
 
     private void CheckGrounded()
     {
+        if (Physics2D.OverlapCircle(groundCheck.position, 0.01f, killzoneLayer))
+        {
+            Die();
+            return;
+        }
+
         Collider2D jumpOffEnemy = Physics2D.OverlapCircle(groundCheck.position, 0.001f, enemyLayer);
 
         if (jumpOffEnemy != null)
@@ -179,8 +187,6 @@ public class Hero : MonoBehaviour
         {
             slopeNormal = hit.normal;
             float slopeAngle = Vector2.Angle(slopeNormal, Vector2.up);
-
-            Debug.Log("Angle: " + slopeAngle);
 
             if (slopeAngle > 10f && slopeAngle <= maxSlopeAngle)
             {

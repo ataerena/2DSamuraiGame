@@ -15,7 +15,7 @@ TagManager:
   - Ground
   - Enemy
   - Hitbox
-  - 
+  - Next Level
   - 
   - 
   - 
@@ -42,6 +42,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 3532459933
+    locked: 0
+  - name: Next Level
+    uniqueID: 2017257901
+    locked: 0
   - name: Player
     uniqueID: 2037849421
+    locked: 0
+  - name: Accessory
+    uniqueID: 4215902111
     locked: 0
