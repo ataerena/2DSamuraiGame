@@ -350,11 +350,27 @@ public class Hero : MonoBehaviour
         isDead = true;
     }
 
+    #region Scene
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Finish Game") && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+        {
+            LoadScene("NO SCENE");
+        }
+    }
+
+    private void LoadScene(string sceneName)
+    {
+        Debug.Log("Loading new Scene: " + sceneName);
+    }
     private void ReloadScene()
     {
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
+
+    #endregion
 
     #region Animation
 
