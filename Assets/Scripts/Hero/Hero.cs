@@ -40,7 +40,7 @@ public class Hero : MonoBehaviour
     public bool comboActivated = false;
 
     [Header("Stats")]
-    private int maxHealth = 100;
+    public int maxHealth = 100;
     public int health;
     private bool isTakingHit = false;
     public bool isDead = false;

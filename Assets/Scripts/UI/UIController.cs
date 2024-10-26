@@ -8,14 +8,14 @@ public class UIController : MonoBehaviour
     [SerializeField] Hero hero;
 
     [Header("Fields")]
-    [SerializeField] TextMeshProUGUI health;
+    [SerializeField] RectTransform health;
     [SerializeField] TextMeshProUGUI enemyCount;
 
     private void Update()
     {
         if (hero != null)
         {
-            health.text = hero.health.ToString();
+            health.sizeDelta = new Vector2 (100 * hero.health / hero.maxHealth, health.sizeDelta.y);
         }
 
         enemyCount.text = GameObject.FindGameObjectsWithTag("Enemy").Length.ToString();

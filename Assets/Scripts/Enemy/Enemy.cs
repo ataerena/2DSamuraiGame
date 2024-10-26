@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Enemy : MonoBehaviour
 {
+    [Header("UI")]
+    [SerializeField] RectTransform healthBarFill;
     protected virtual int MaxHealth { get; set; } = 100;
     private int currentHealth;
     protected EnemyState enemyState;
@@ -16,12 +19,23 @@ public abstract class Enemy : MonoBehaviour
     private bool canAttack = false;
     [SerializeField] EnemyHitbox EnemyHitbox;
     public virtual int damage { get; set; } = 25;
-    void Start()
+    void Awake()
     {
         enemyState = EnemyState.Idle;
         currentHealth = MaxHealth;
         cldr2D = GetComponent<CapsuleCollider2D>();
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        UpdateHealthBar();
+    }
+
+    protected virtual void UpdateHealthBar()
+    {
+        float fillAmount = 300 * currentHealth / MaxHealth;
+        healthBarFill.sizeDelta = new Vector2(fillAmount, healthBarFill.sizeDelta.y);
     }
 
     void FixedUpdate()
