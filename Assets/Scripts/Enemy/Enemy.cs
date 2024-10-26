@@ -96,6 +96,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void ResetAttack()
     {
+        enemyState = EnemyState.Idle;
         EnemyHitbox.gameObject.SetActive(false);
         EnemyHitbox.gameObject.GetComponent<BoxCollider2D>().enabled = false;
     }
@@ -173,7 +174,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual bool CanDetectHero()
     {
-        return enemyState != EnemyState.Dead && enemyState != EnemyState.TakingDamage;
+        return enemyState != EnemyState.Dead && enemyState != EnemyState.TakingDamage && enemyState != EnemyState.Attacking;
     }
 
     protected enum EnemyState

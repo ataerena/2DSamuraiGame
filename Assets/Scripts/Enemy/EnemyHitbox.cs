@@ -6,7 +6,7 @@ public class EnemyHitbox : MonoBehaviour
 {
     [SerializeField] Hero heroPlayer;
     [SerializeField] Enemy attachedEnemy;
-    void Awake()
+    void Start()
     {
         gameObject.SetActive(false);
     }

@@ -41,7 +41,7 @@ public class Hero : MonoBehaviour
 
     [Header("Stats")]
     private int maxHealth = 100;
-    private int health;
+    public int health;
     private bool isTakingHit = false;
     public bool isDead = false;
 
