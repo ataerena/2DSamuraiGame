@@ -1,2 +1,2 @@
 - This project is built as a way to learn the ropes with Unity 2D hands-on experience.
-- You can play my build my downloading the **MainBuild** zip file. This build is for Windows only.
+- You can play my build my downloading the **MainBuild** zip file. This build is supposedly Windows, Mac and Linux supported; but it was tested on Windows only. If your machine's OS is not Windows, please try to run the project at your own risk of not being able to.
