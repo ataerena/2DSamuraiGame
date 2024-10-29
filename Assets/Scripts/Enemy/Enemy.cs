@@ -136,6 +136,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void TakeDamage(int _damage) // public class instead of protected so that the Hitbox script can access it
     {
+        ResetAttack();
         enemyState = EnemyState.TakingDamage;
         currentHealth -= _damage;
         if (currentHealth > 0)

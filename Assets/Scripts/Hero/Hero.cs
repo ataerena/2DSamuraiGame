@@ -215,6 +215,7 @@ public class Hero : MonoBehaviour
             airState = AirState.Jumping;
             // this is too overpowered, and this game isn't going to be on a large enough scale to solve this problem. For now, take no damage if from jumping off of enemy heads
             jumpOffEnemy.GetComponentInParent<Enemy>().TakeDamage(0);
+            PlayAudio("Land");
             return;
         }
 
@@ -389,6 +390,7 @@ public class Hero : MonoBehaviour
     public void TakeDamage(int _damage)
     {
         PlayAudio("PlayerGetHit");
+        EndCombo();
         health -= _damage;
         if (health > 0)
         {
