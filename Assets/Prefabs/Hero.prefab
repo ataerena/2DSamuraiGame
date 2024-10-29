@@ -112,8 +112,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2037849421
-  m_SortingLayer: 1
-  m_SortingOrder: 0
+  m_SortingLayer: 3
+  m_SortingOrder: 99
   m_Sprite: {fileID: 4723107735738678597, guid: 0bd97e23f8b532a4f8969605a3b00a4e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -137,6 +137,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e9fd0c46984cc74ca41dacbe30c488a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioClips:
+  - {fileID: 8300000, guid: 023ea3ddeaa8dd146b7633a0800e5a0e, type: 3}
+  - {fileID: 8300000, guid: e1e2d06fe0d78194b9c7c8cc88414d0d, type: 3}
+  - {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
+  - {fileID: 8300000, guid: 4e349dc959014a845b9aa317d1c2b7f0, type: 3}
+  - {fileID: 8300000, guid: 323e15cfe809e114ab92c9f4b25e8bc2, type: 3}
+  - {fileID: 8300000, guid: 7c47b20bb9874304a809dc5580d403ba, type: 3}
+  killzoneLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -148,6 +158,7 @@ MonoBehaviour:
   jumpForce: 50
   gravity: 100
   fallSpeedThreshold: 100
+  maxSlopeAngle: 45
   wallCheck: {fileID: 1233683826261031084}
   offWallForceX: 40
   offWallForceY: 40
@@ -159,6 +170,8 @@ MonoBehaviour:
   isAttacking: 0
   comboActive: 0
   comboActivated: 0
+  maxHealth: 100
+  health: 0
   isDead: 0
 --- !u!114 &4853800325563858508
 MonoBehaviour:

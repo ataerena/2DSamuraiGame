@@ -150,14 +150,15 @@ public class Hero : MonoBehaviour
     {
         if (wallState == WallState.None)
         {
-            PlayAudio("Jump");
             if (IsGrounded())
             {
+                PlayAudio("Jump");
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 airState = AirState.Jumping;
             }
             else if (airState == AirState.Jumping)
             {
+                PlayAudio("Jump");
                 rb.velocityY = 0;
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 airState = AirState.DoubleJumping;
@@ -415,12 +416,12 @@ public class Hero : MonoBehaviour
     {
         if (collision.CompareTag("Finish Game") && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
         {
-            SceneController.LoadScene("deneme");
+            StartCoroutine(SceneController.LoadNextScene());
         }
     }
     private void ReloadScene()
     {
-        SceneController.ReloadScene();
+        StartCoroutine(SceneController.ReloadScene());
     }
 
     #endregion

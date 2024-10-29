@@ -107,4 +107,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hero: {fileID: 0}
   horizontalOffset: 0.85
-  smoothTime: 0.0015
+  smoothTime: 0.004
