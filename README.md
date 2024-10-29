@@ -1,2 +1,2 @@
 - This project is built as a way to learn the ropes with Unity 2D hands-on experience.
-- You can play my build my downloading the **MainBuild** zip file.
+- You can play my build my downloading the **MainBuild** zip file. This build is for Windows only.
