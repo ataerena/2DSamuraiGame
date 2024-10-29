@@ -1,3 +1,4 @@
 - This project is built as a way to learn the ropes with Unity 2D hands-on experience.
 - You can play my build my downloading the **MainBuild** zip file, extracting it's content and running **ata_2D**.
 - The build is supposedly Windows, Mac and Linux supported; but it was tested on Windows only. If your machine's OS is not Windows, please try to run the project at your own risk of not being able to.
+- A detailed documentation can be found in "Samurai Game Documentation"
