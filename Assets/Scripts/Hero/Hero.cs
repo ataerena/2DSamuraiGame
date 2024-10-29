@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class Hero : MonoBehaviour
 {
+    [Header("Sound")]
+    [SerializeField] List<AudioClip> audioClips;
+    private Dictionary<string, AudioClip> audioClipDictionary;
+    private AudioSource audioSource;
+    private float walkSoundMaxTime = .3f;
+    private float walkSoundTime = 0;
     [Header("Ground Check")]
     [SerializeField] LayerMask killzoneLayer;
     [SerializeField] LayerMask groundLayer;
@@ -49,9 +55,11 @@ public class Hero : MonoBehaviour
     private Rigidbody2D rb;
     private void Start()
     {
+        SetAudioClips();
         health = maxHealth;
         weapon = new Sword();
         rb = GetComponent<Rigidbody2D>();
+        GameObject.FindGameObjectWithTag("UI Animation").GetComponent<Animator>().Play("OpenScene");
     }
 
     private void Update()
@@ -62,6 +70,7 @@ public class Hero : MonoBehaviour
     {
         if (!isDead)
         {
+            WalkSoundUpdate();
             CheckGrounded();
             ApplyManualGravity();
             OnWall();
@@ -70,6 +79,49 @@ public class Hero : MonoBehaviour
 
         PlayAnimation();
     }
+
+    #region Audio
+
+    private void SetAudioClips()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioClipDictionary = new Dictionary<string, AudioClip>();
+        foreach (var clip in audioClips)
+        {
+            audioClipDictionary[clip.name] = clip;
+        }
+    }
+
+    private void PlayAudio(string name)
+    {
+        if (audioClipDictionary.TryGetValue(name, out AudioClip clip))
+        {
+            audioSource.PlayOneShot(clip);
+        }
+        else
+        {
+            Debug.LogError($"No audio clip with name \"{name}\" was found!");
+        }
+    }
+
+    private void PlayWalkSound()
+    {
+        if (walkSoundTime <= 0)
+        {
+            walkSoundTime = walkSoundMaxTime;
+            PlayAudio("Walk");
+        }
+    }
+
+    private void WalkSoundUpdate()
+    {
+        if(walkSoundTime > 0)
+        {
+            walkSoundTime -= Time.fixedDeltaTime;
+        }
+    }
+
+    #endregion
 
     #region Movement
 
@@ -85,6 +137,9 @@ public class Hero : MonoBehaviour
 
         if (moveX != 0 && rb.velocity.magnitude < 10f)
         {
+            if (IsGrounded())
+                PlayWalkSound();
+
             Vector2 force = (IsGrounded() ? groundForce : airForce) * (moveX > 0 ? 1 : -1) * moveX * right;
             rb.AddForce(force, ForceMode2D.Force);
             RotateHero(moveX);
@@ -95,6 +150,7 @@ public class Hero : MonoBehaviour
     {
         if (wallState == WallState.None)
         {
+            PlayAudio("Jump");
             if (IsGrounded())
             {
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
@@ -118,6 +174,7 @@ public class Hero : MonoBehaviour
         Vector2 wallJumpForce;
         if (wallState == WallState.OnWall)
         {
+            PlayAudio("Jump");
             RotateHero(facingRight ? -1f : 1f);
             wallJumpForce = new Vector2(offWallForceX * transform.right.x, offWallForceY);
             airState = AirState.Jumping;
@@ -249,6 +306,7 @@ public class Hero : MonoBehaviour
 
         if (onWall)
         {
+            if (wallState != WallState.OnWall) PlayAudio("OnWall");
             wallState = WallState.OnWall;
         }
         else
@@ -292,7 +350,7 @@ public class Hero : MonoBehaviour
 
     public void LightAttack()
     {
-        
+        PlayAudio("Attack");
         hitBox.SetActive(true);
         hitBox.GetComponent<BoxCollider2D>().enabled = true;
     }
@@ -329,6 +387,7 @@ public class Hero : MonoBehaviour
 
     public void TakeDamage(int _damage)
     {
+        PlayAudio("PlayerGetHit");
         health -= _damage;
         if (health > 0)
         {
@@ -356,18 +415,12 @@ public class Hero : MonoBehaviour
     {
         if (collision.CompareTag("Finish Game") && GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
         {
-            LoadScene("NO SCENE");
+            SceneController.LoadScene("deneme");
         }
-    }
-
-    private void LoadScene(string sceneName)
-    {
-        Debug.Log("Loading new Scene: " + sceneName);
     }
     private void ReloadScene()
     {
-        string currentSceneName = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene(currentSceneName);
+        SceneController.ReloadScene();
     }
 
     #endregion
