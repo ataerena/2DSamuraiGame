@@ -37,8 +37,6 @@ public class CameraController : MonoBehaviour
 
         HorizontalCamMovement(rb.velocity.x, camPosition);
         VerticalCamMovement(camPosition);
-
-        //transform.position = Vector3.Slerp(transform.position, camPosition, smoothTime);
     }
 
     private void HorizontalCamMovement(float heroVelocity, Vector3 camPosition)
@@ -57,9 +55,7 @@ public class CameraController : MonoBehaviour
             camPosition.x = hero.transform.position.x;
         }
 
-        transform.position = Vector3.Slerp(transform.position, camPosition, smoothTime);
-
-        //return camPosition;
+        transform.position = Vector3.Slerp(transform.position, camPosition, smoothTime * Time.deltaTime);
     }
 
     private void VerticalCamMovement(Vector3 camPosition)
@@ -84,7 +80,6 @@ public class CameraController : MonoBehaviour
             camPosition.y = hero.transform.position.y + 2f * camera.orthographicSize / Screen.height; 
         }
 
-        transform.position = Vector3.Slerp(transform.position, camPosition, 3*smoothTime);
-        //return camPosition;
+        transform.position = Vector3.Slerp(transform.position, camPosition, 3 * smoothTime * Time.deltaTime);
     }
 }

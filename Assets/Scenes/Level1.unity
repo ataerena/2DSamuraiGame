@@ -3107,6 +3107,10 @@ PrefabInstance:
       propertyPath: hero
       value: 
       objectReference: {fileID: 6181202872534495617}
+    - target: {fileID: 4733447887677141211, guid: 3796fa23868acfc4f86edba7bd38ca73, type: 3}
+      propertyPath: smoothTime
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
