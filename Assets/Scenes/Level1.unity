@@ -34602,6 +34602,10 @@ PrefabInstance:
       propertyPath: hero
       value: 
       objectReference: {fileID: 8879956809935902045}
+    - target: {fileID: 2348954285493730210, guid: 189e934727e20e342882f1b3371fefd6, type: 3}
+      propertyPath: m_text
+      value: 'REMAINING ENEMIES:'
+      objectReference: {fileID: 0}
     - target: {fileID: 2761412713737575987, guid: 189e934727e20e342882f1b3371fefd6, type: 3}
       propertyPath: m_Name
       value: Canvas
